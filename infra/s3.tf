@@ -51,14 +51,6 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
   }
 }
 
-resource "aws_s3_object" "s3_objects" {
-  for_each = fileset("${path.module}/../src", "**")
-
-  bucket = aws_s3_bucket.resume_bucket.id
-  key    = each.value
-  source = "${path.module}/../src/${each.value}"
-}
-
 resource "aws_s3_bucket" "domain_bucket" {
   bucket = local.s3_domain_bucket_name
 }
