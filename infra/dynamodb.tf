@@ -1,13 +1,13 @@
 resource "aws_dynamodb_table" "resume_data" {
-    name = "CHONGYL_RESUME_DATA"
-    hash_key = "DATA_NAME"
+  name     = "CHONGYL_RESUME_DATA"
+  hash_key = "DATA_NAME"
 
-    attribute {
-      name = "DATA_NAME"
-      type = "S"
-    }
+  attribute {
+    name = "DATA_NAME"
+    type = "S"
+  }
 
-    billing_mode = "PAY_PER_REQUEST"
+  billing_mode = "PAY_PER_REQUEST"
 }
 
 # resource "aws_dynamodb_table_item" "visitor_count" {

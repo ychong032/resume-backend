@@ -1,7 +1,7 @@
 locals {
-  s3_bucket_name = "yow-lim-cloud-resume-bucket"
+  s3_bucket_name        = "yow-lim-cloud-resume-bucket"
   s3_domain_bucket_name = "chongyl.com"
-  subdomain_url = "www.chongyl.com"
+  subdomain_url         = "www.chongyl.com"
 }
 
 resource "aws_s3_bucket" "resume_bucket" {
@@ -13,7 +13,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption_config
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = ""
-      sse_algorithm = "AES256"
+      sse_algorithm     = "AES256"
     }
     bucket_key_enabled = true
   }
@@ -25,21 +25,21 @@ resource "aws_s3_bucket_policy" "allow_cloudfront_access" {
     {
       Statement = [
         {
-          Action    = "s3:GetObject"
+          Action = "s3:GetObject"
           Condition = {
             StringEquals = {
               "AWS:SourceArn" = "arn:aws:cloudfront::144421025322:distribution/E3HXVC6Z0OWUTT"
             }
           }
-          Effect    = "Allow"
+          Effect = "Allow"
           Principal = {
-              Service = "cloudfront.amazonaws.com"
+            Service = "cloudfront.amazonaws.com"
           }
-          Resource  = "arn:aws:s3:::yow-lim-cloud-resume-bucket/*"
-          Sid       = "AllowCloudFrontServicePrincipalReadOnly"
+          Resource = "arn:aws:s3:::yow-lim-cloud-resume-bucket/*"
+          Sid      = "AllowCloudFrontServicePrincipalReadOnly"
         },
       ]
-      Version  = "2012-10-17"
+      Version = "2012-10-17"
     }
   )
 }
@@ -53,9 +53,9 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
 
 resource "aws_s3_object" "s3_objects" {
   for_each = fileset("${path.module}/../src", "**")
-  
+
   bucket = aws_s3_bucket.resume_bucket.id
-  key = each.value
+  key    = each.value
   source = "${path.module}/../src/${each.value}"
 }
 
@@ -68,7 +68,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "domain_bucket_con
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = ""
-      sse_algorithm = "AES256"
+      sse_algorithm     = "AES256"
     }
     bucket_key_enabled = true
   }
@@ -78,7 +78,7 @@ resource "aws_s3_bucket_website_configuration" "domain_website_config" {
   bucket = aws_s3_bucket.domain_bucket.id
   redirect_all_requests_to {
     host_name = local.subdomain_url
-    protocol = "https"
+    protocol  = "https"
   }
 }
 
@@ -88,21 +88,21 @@ resource "aws_s3_bucket_policy" "domain_allow_cloudfront_access" {
     {
       Statement = [
         {
-          Action    = "s3:GetObject"
+          Action = "s3:GetObject"
           Condition = {
             StringEquals = {
               "AWS:SourceArn" = "arn:aws:cloudfront::144421025322:distribution/EAWCFKPNQS8LQ"
             }
           }
-          Effect    = "Allow"
+          Effect = "Allow"
           Principal = {
-              Service = "cloudfront.amazonaws.com"
+            Service = "cloudfront.amazonaws.com"
           }
-          Resource  = "arn:aws:s3:::chongyl.com/*"
-          Sid       = "AllowCloudFrontServicePrincipalReadOnly"
+          Resource = "arn:aws:s3:::chongyl.com/*"
+          Sid      = "AllowCloudFrontServicePrincipalReadOnly"
         },
       ]
-      Version  = "2012-10-17"
+      Version = "2012-10-17"
     }
   )
 }
