@@ -11,6 +11,12 @@ terraform {
     }
   }
 
+  backend "s3" {
+    bucket = "resume-bucket-terraform-state"
+    key = "state"
+    region = "ap-southeast-1"
+  }
+
   required_version = ">= 1.10"
 }
 
