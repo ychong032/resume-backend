@@ -1,19 +1,19 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 5.82.2"
     }
 
     archive = {
-      source = "hashicorp/archive"
+      source  = "hashicorp/archive"
       version = "~> 2.7.0"
     }
   }
 
   backend "s3" {
     bucket = "resume-bucket-terraform-state"
-    key = "state"
+    key    = "state"
     region = "ap-southeast-1"
   }
 
@@ -26,5 +26,5 @@ provider "aws" {
 
 provider "aws" {
   region = "us-east-1"
-  alias = "ue1"
+  alias  = "ue1"
 }
